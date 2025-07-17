@@ -4,6 +4,9 @@ using OpenUtau.Core.Format;
 using OpenUtau.Core;
 using OpenUtau.Audio;
 using OpenUtau.Classic;
+using OpenUtau.Core.Format.MusicXMLSchema;
+
+
 
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance); //language support
 
@@ -47,9 +50,15 @@ project.tracks.Add(track);
 //assign singer and phonemizer
 project.tracks[0].singer = teto.Id;
 project.tracks[0].phonemizer = "OpenUtau.Plugin.Builtin.EnXSampaPhonemizer";
-
-//"OpenUtau.Core.DiffSinger.DiffSingerARPAPlusEnglishPhonemizer"; //OpenUtau.Core.DefaultPhonemizer
+//"OpenUtau.Plugin.Builtin.JapaneseCVVCPhonemizer"
+//"OpenUtau.Plugin.Builtin.ArpasingPlusPhonemizer";
+//"OpenUtau.Core.DefaultPhonemizer"
+//"OpenUtau.Plugin.Builtin.EnXSampaPhonemizer"
 project.tracks[0].AfterLoad(project); // load the singer + phonemes
+
+project.tracks[0].Phonemizer.SetSinger(project.tracks[0].Singer);//set the singer for the phonemizer (english phonemizers) NOTE: THIS TAKES A LONG TIME TO LOAD
+Thread.Sleep(2000); //WAIT TO LOAD ALL THE SHI
+
 Console.WriteLine($"Track singer: {project.tracks[0].Singer.Name}");
 // project.tracks[0].Phonemizer.SetSinger(project.tracks[0].Singer);
 Console.WriteLine($"Track phonemizer: {project.tracks[0].Phonemizer}");
@@ -66,8 +75,10 @@ part.Duration = 6000;    // Duration in ticks (adjust as needed)
 part.name = "Main Melody Skibidi";
 
 // Create a note
-var lyrics = new List<string> { "fA", "- ki", "- n@", "DA", "- mA", "t s-"}; 
-for (int i = 0; i < 6; i++) {
+// var lyrics = new List<string> { "fA", "king", "dum", "ass"}; 
+var lyrics = new List<string> { "red", "miku", "fa king", "works" }; // Example lyrics
+for (int i = 0; i < 4; i++)
+{
     UNote note = project.CreateNote();
     note.position = i * 960;      // Start at the beginning
     note.duration = 480;    // Duration in ticks (quarter note if resolution is 480)
@@ -85,6 +96,9 @@ project.parts.Add(part);
 //final validation to add phrases
 project.ValidateFull();
 
+foreach (var phoneme in part.phonemes) {
+    Console.WriteLine($"Phoneme: {phoneme.phoneme}, Duration: {phoneme.Duration}");
+}
 // Export the project as a USTx file
 string savePath = @"..\..\..\outputs\output.ustx";
 project.BeforeSave();

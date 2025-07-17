@@ -11,6 +11,14 @@
 
     <ItemGroup>
   <Content Include="assets\Singers\**\*">
+    <Link>Singers\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+</ItemGroup>
+
+    <ItemGroup>
+  <Content Include="assets\OpenUtau.Plugin.Builtin.dll">
+    <Link>OpenUtau.Plugin.Builtin.dll</Link>
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
 </ItemGroup>
